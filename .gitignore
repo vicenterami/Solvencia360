@@ -1,0 +1,19 @@
+# Ignorar archivos de entorno
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+venv/
+
+# Node.js
+node_modules/
+dist/
+*.log
+
+# VSCode
+.vscode/
+
+# Archivos del sistema
+.DS_Store
