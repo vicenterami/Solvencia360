@@ -1,7 +1,7 @@
 from app import db
 from datetime import datetime
 
-class User(db.Model):
+class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -16,7 +16,7 @@ class Presupuesto(db.Model):
     descripcion = db.Column(db.Text)
     fecha_inicio = db.Column(db.Date, nullable=False)
     fecha_fin = db.Column(db.Date, nullable=False)
-    usuario_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
 
     transacciones = db.relationship("Transaccion", backref="presupuesto", lazy=True)
 
