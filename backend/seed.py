@@ -1,6 +1,7 @@
 from app import create_app, db
 from app.models import Usuario, Presupuesto, Transaccion, Alerta
-from datetime import datetime, date
+from datetime import date
+from werkzeug.security import generate_password_hash
 
 app = create_app()
 
@@ -8,13 +9,13 @@ with app.app_context():
     db.drop_all()
     db.create_all()
 
-    # 👤 Usuarios
-    user1 = Usuario(nombre="Camilo Parada", email="camilo@empresa.com", password_hash="hash1", rol="admin")
-    user2 = Usuario(nombre="Javier Monsalvez", email="javier@empresa.com", password_hash="hash2", rol="analista")
-    user3 = Usuario(nombre="Vicente Bravo", email="vicente@empresa.com", password_hash="hash3", rol="admin")
+    # 👤 Usuarios (con contraseñas hasheadas reales)
+    user1 = Usuario(nombre="Camilo Parada", email="camilo@empresa.com", password_hash=generate_password_hash("hash1"), rol="admin")
+    user2 = Usuario(nombre="Javier Monsalvez", email="javier@empresa.com", password_hash=generate_password_hash("hash2"), rol="analista")
+    user3 = Usuario(nombre="Vicente Bravo", email="vicente@empresa.com", password_hash=generate_password_hash("hash3"), rol="admin")
 
     db.session.add_all([user1, user2, user3])
-    db.session.flush()  # Para obtener los IDs
+    db.session.flush()
 
     # 📊 Presupuestos
     presupuesto1 = Presupuesto(
@@ -66,4 +67,4 @@ with app.app_context():
 
     usuarios = Usuario.query.all()
     print(f"Usuarios guardados: {[u.nombre for u in usuarios]}")
-    print("✅ Base de datos poblada con datos de prueba.")
+    print("✅ Base de datos poblada con contraseñas hasheadas.")

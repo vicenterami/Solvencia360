@@ -5,7 +5,7 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)
     rol = db.Column(db.String(50), nullable=False)
 
     presupuestos = db.relationship("Presupuesto", backref="usuario", lazy=True)

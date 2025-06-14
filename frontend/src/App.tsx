@@ -15,6 +15,20 @@ function App() {
       })
   }, [])
 
+  useEffect(() => {
+  axios.post('http://localhost:5000/api/auth/login', {
+    email: 'vicente@empresa.com',
+    password: 'hash3'
+  }).then(res => {
+    const token = res.data.token
+    setMessage('Login OK: ' + token.slice(0, 10) + '...')
+    localStorage.setItem('token', token)
+  }).catch(() => {
+    setMessage('Login fallido')
+  })
+}, [])
+
+
   return (
     <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
       <h1>Solvencia360</h1>
