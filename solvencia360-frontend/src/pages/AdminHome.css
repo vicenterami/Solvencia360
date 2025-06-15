@@ -1,0 +1,75 @@
+/* src/pages/AdminHome.css */
+
+.adminhome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.adminhome-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.adminhome-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.adminhome-header p {
+  font-size: 1.2rem;
+  color: #cccccc;
+}
+
+.adminhome-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.card {
+  background-color: #ffffff;
+  color: #333333;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease;
+  min-height: 200px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  color: #555555;
+}
+
+.card button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+  background-color: #357bd8;
+}
