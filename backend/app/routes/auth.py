@@ -11,7 +11,7 @@ def login():
     data = request.json
     user = Usuario.query.filter_by(email=data["email"]).first()
     if user and check_password_hash(user.password_hash, data["password"]):
-        token = create_access_token(identity={"id": user.id, "rol": user.rol})
+        token = create_access_token(identity=str(user.id))  # 👈 debe ser string
         return jsonify({"token": token})
     return jsonify({"error": "Credenciales inválidas"}), 401
 
