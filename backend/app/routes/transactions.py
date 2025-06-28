@@ -18,11 +18,18 @@ def listar_transacciones(presupuesto_id):
         "fecha": str(t.fecha)
     } for t in transacciones])
 
-# 🔼 POST: crear nueva transacción
+# ➕ POST: crear nueva transacción
 @transactions_bp.route('/', methods=['POST'])
 @jwt_required()
 def crear_transaccion():
     data = request.json
+
+    # Validación mínima
+    if data["tipo"] not in ["ingreso", "gasto"]:
+        return jsonify({"error": "Tipo inválido (ingreso/gasto)"}), 400
+    if data["monto"] < 0:
+        return jsonify({"error": "El monto no puede ser negativo"}), 400
+
     transaccion = Transaccion(
         tipo=data["tipo"],
         monto=data["monto"],
@@ -34,12 +41,18 @@ def crear_transaccion():
     db.session.commit()
     return jsonify({"message": "Transacción creada", "id": transaccion.id})
 
-# ✏️ PUT: actualizar una transacción
+# ✏️ PUT: actualizar transacción
 @transactions_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def actualizar_transaccion(id):
     t = Transaccion.query.get_or_404(id)
     data = request.json
+
+    if "tipo" in data and data["tipo"] not in ["ingreso", "gasto"]:
+        return jsonify({"error": "Tipo inválido"}), 400
+    if "monto" in data and data["monto"] < 0:
+        return jsonify({"error": "Monto inválido"}), 400
+
     t.tipo = data.get("tipo", t.tipo)
     t.monto = data.get("monto", t.monto)
     t.descripcion = data.get("descripcion", t.descripcion)
