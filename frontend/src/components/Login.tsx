@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [role] = useState(null);
-  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail]       = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError]       = useState<string | null>(null);
+  const navigate                = useNavigate();
 
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', {
         email,
@@ -23,23 +20,17 @@ const Login: React.FC = () => {
       const { token, rol, usuario_id } = res.data;
       localStorage.setItem('token', token);
       localStorage.setItem('rol', rol);
-      localStorage.setItem('usuario_id', usuario_id); // por si necesitas luego
+      localStorage.setItem('usuario_id', String(usuario_id));
 
-      // Redirigir según el rol
       if (rol === 'admin') {
         navigate('/admin-home');
       } else {
         navigate('/user-home');
       }
-
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
       setError('Correo o contraseña incorrectos');
     }
-  };
-
-  const handleRegisterClick = () => {
-    navigate('/register');
   };
 
   return (
@@ -52,7 +43,7 @@ const Login: React.FC = () => {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               required
             />
           </div>
@@ -62,28 +53,24 @@ const Login: React.FC = () => {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               required
             />
           </div>
 
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p className="error-message">{error}</p>}
 
           <button type="submit" className="login-button">
             Iniciar sesión
           </button>
 
-          {role === 'usuario' && (
-            <div style={{ marginTop: '15px' }}>
-              <button
-                type="button"
-                className="register-button"
-                onClick={handleRegisterClick}
-              >
-                ¿No tienes cuenta? Regístrate aquí
-              </button>
-            </div>
-          )}
+          {/* Mostramos siempre el enlace de registro */}
+          <div className="register-link">
+            ¿No tienes cuenta?{' '}
+            <Link to="/register" className="register-button">
+              Regístrate aquí
+            </Link>
+          </div>
         </form>
       </div>
     </div>
