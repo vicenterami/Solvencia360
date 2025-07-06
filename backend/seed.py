@@ -11,7 +11,7 @@ with app.app_context():
 
     # 👤 Usuarios (con contraseñas hasheadas reales)
     user1 = Usuario(nombre="Camilo Parada", email="camilo@empresa.com", password_hash=generate_password_hash("hash1"), rol="admin")
-    user2 = Usuario(nombre="Javier Monsalvez", email="javier@empresa.com", password_hash=generate_password_hash("hash2"), rol="analista")
+    user2 = Usuario(nombre="Javier Monsalvez", email="javier@empresa.com", password_hash=generate_password_hash("hash2"), rol="usuario")
     user3 = Usuario(nombre="Vicente Bravo", email="vicente@empresa.com", password_hash=generate_password_hash("hash3"), rol="admin")
 
     db.session.add_all([user1, user2, user3])

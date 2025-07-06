@@ -5,15 +5,32 @@ import Login from './components/Login';
 import UserHome from './pages/UserHome';
 import AdminHome from './pages/AdminHome';
 import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/user-home" element={<UserHome />} />
-        <Route path="/admin-home" element={<AdminHome />} />
         <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/user-home"
+          element={
+            <ProtectedRoute allowedRoles={['usuario']}>
+              <UserHome />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin-home"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminHome />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

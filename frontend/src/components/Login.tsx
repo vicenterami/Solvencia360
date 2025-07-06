@@ -1,27 +1,40 @@
-// src/components/Login.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Login.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [role, setRole] = useState<string>('usuario');
+  const [role] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Role:', role);
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/login', {
+        email,
+        password
+      });
 
-    // Redirigir según el rol
-    if (role === 'administrador') {
-      navigate('/admin-home');
-    } else {
-      navigate('/user-home');
+      const { token, rol, usuario_id } = res.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('rol', rol);
+      localStorage.setItem('usuario_id', usuario_id); // por si necesitas luego
+
+      // Redirigir según el rol
+      if (rol === 'admin') {
+        navigate('/admin-home');
+      } else {
+        navigate('/user-home');
+      }
+
+    } catch (err: any) {
+      console.error(err);
+      setError('Correo o contraseña incorrectos');
     }
   };
 
@@ -54,19 +67,12 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <div className="input-group">
-            <label>Tipo de usuario</label>
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="usuario">Usuario</option>
-              <option value="administrador">Administrador</option>
-            </select>
-          </div>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
 
           <button type="submit" className="login-button">
             Iniciar sesión
           </button>
 
-          {/* Solo mostrar el botón de registrarse si es usuario */}
           {role === 'usuario' && (
             <div style={{ marginTop: '15px' }}>
               <button

@@ -1,24 +1,36 @@
 // src/pages/Register.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register: React.FC = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log('Nombre:', name);
-    console.log('Email:', email);
-    console.log('Contraseña:', password);
+    try {
+      // Enviar datos al backend
+      const response = await axios.post('http://localhost:5000/api/usuarios/', {
+        nombre: name,
+        email: email,
+        password: password,
+        rol: "usuario", // <--- lo agregamos
+      });
 
-    // Aquí normalmente enviarías los datos a la API para crear la cuenta
+      console.log('✅ Usuario creado:', response.data);
+      alert('Registro exitoso. Ahora puedes iniciar sesión.');
 
-    // Por ahora, redirigimos al login
-    navigate('/');
+      // Redirigir al login
+      navigate('/');
+    } catch (error: any) {
+      console.error('❌ Error al registrar usuario:', error);
+      alert('Error al registrar. Verifica los datos o si el email ya está registrado.');
+    }
   };
 
   return (
@@ -55,7 +67,6 @@ const Register: React.FC = () => {
               required
             />
           </div>
-
           <button type="submit" className="login-button">
             Registrarse
           </button>
