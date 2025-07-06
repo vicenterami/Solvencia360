@@ -1,6 +1,6 @@
 from app import create_app, db
 from app.models import Usuario, Presupuesto, Transaccion, Alerta
-from datetime import date
+from datetime import date, datetime
 from werkzeug.security import generate_password_hash
 
 app = create_app()
@@ -54,11 +54,29 @@ with app.app_context():
 
     db.session.add_all(transacciones)
 
-    # 🚨 Alertas
+    # 🚨 Alertas (con nuevos campos)
     alertas = [
-        Alerta(mensaje="¡Presupuesto Marketing alcanzó el 80%!", nivel="alto", presupuesto_id=presupuesto1.id),
-        Alerta(mensaje="Ingreso importante registrado", nivel="informativo", presupuesto_id=presupuesto2.id),
-        Alerta(mensaje="Solvencia360 superó los gastos esperados", nivel="crítico", presupuesto_id=presupuesto3.id),
+        Alerta(
+            titulo="Presupuesto Marketing al 80%",
+            mensaje="¡Presupuesto Marketing alcanzó el 80%!", 
+            nivel="alto", 
+            presupuesto_id=presupuesto1.id,
+            leida=False
+        ),
+        Alerta(
+            titulo="Ingreso registrado",
+            mensaje="Ingreso importante registrado", 
+            nivel="informativo", 
+            presupuesto_id=presupuesto2.id,
+            leida=True
+        ),
+        Alerta(
+            titulo="Exceso de gastos",
+            mensaje="Solvencia360 superó los gastos esperados", 
+            nivel="crítico", 
+            presupuesto_id=presupuesto3.id,
+            leida=False
+        ),
     ]
 
     db.session.add_all(alertas)

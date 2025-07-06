@@ -68,3 +68,23 @@ def eliminar_transaccion(id):
     db.session.delete(t)
     db.session.commit()
     return jsonify({"message": "Transacción eliminada"})
+
+
+# 🔍 GET: listar transacciones por usuario
+@transactions_bp.route('/usuario/<int:usuario_id>', methods=['GET'])
+@jwt_required()
+def transacciones_por_usuario(usuario_id):
+    from app.models import Presupuesto  # import aquí para evitar circular imports
+    presupuestos = Presupuesto.query.filter_by(usuario_id=usuario_id).all()
+    presupuesto_ids = [p.id for p in presupuestos]
+
+    transacciones = Transaccion.query.filter(Transaccion.presupuesto_id.in_(presupuesto_ids)).all()
+
+    return jsonify([{
+        "id": t.id,
+        "tipo": t.tipo,
+        "monto": t.monto,
+        "descripcion": t.descripcion,
+        "fecha": str(t.fecha),
+        "presupuesto_id": t.presupuesto_id
+    } for t in transacciones])

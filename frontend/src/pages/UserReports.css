@@ -1,0 +1,48 @@
+/* UserReports.css */
+
+.userreports-container {
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.reporte-detalle {
+  background-color: #3498db;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 25px;
+  color: #fff;
+}
+
+.reporte-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.reporte-item:last-child {
+  border-bottom: none;
+}
+
+.reporte-label {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.reporte-valor {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* Saldo pos/negativo */
+.reporte-item.saldo .reporte-valor {
+  color: #2ecc71;   /* verde si es positivo */
+  font-size: 1.4rem;
+}
+
+.reporte-item.saldo.negative .reporte-valor {
+  color: #e74c3c;   /* rojo si es negativo */
+}

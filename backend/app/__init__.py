@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 import os
+from datetime import timedelta
 
 # Carga las variables de entorno al iniciar
 load_dotenv()
@@ -27,6 +28,8 @@ def create_app():
 
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=3)  # o timedelta(minutes=30)
+    
     # Inicializar extensiones
     CORS(app)
     db.init_app(app)

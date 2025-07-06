@@ -1,0 +1,42 @@
+.adminreports-container {
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-reporte {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.form-reporte input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.form-reporte button {
+  padding: 8px 12px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.form-reporte button:hover {
+  background-color: #2980b9;
+}
+
+.reporte-detalle {
+  background-color: #3498db;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.reporte-detalle p {
+  font-size: 1.1rem;
+  margin: 8px 0;
+}

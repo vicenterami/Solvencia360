@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models import Alerta, Presupuesto
 from app import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 alerts_bp = Blueprint('alerts', __name__, url_prefix='/api/alerts')
 
@@ -77,3 +77,41 @@ def eliminar_alerta(id):
     db.session.delete(a)
     db.session.commit()
     return jsonify({"message": "Alerta eliminada"})
+
+# GET /api/alertas/usuario
+@alerts_bp.route('/usuario', methods=['GET'])
+@jwt_required()
+def listar_alertas_usuario_actual():
+    usuario_id = get_jwt_identity()
+
+    # obtener presupuestos del usuario
+    presupuestos = Presupuesto.query.filter_by(usuario_id=usuario_id).all()
+    ids = [p.id for p in presupuestos]
+
+    # traer sólo las alertas de esos presupuestos
+    alertas = Alerta.query.filter(Alerta.presupuesto_id.in_(ids)).all()
+
+    return jsonify([{
+        "id":      a.id,
+        "titulo":  a.titulo,
+        "mensaje": a.mensaje,
+        "nivel":   a.nivel,
+        "leida":   a.leida,
+        "fecha":   a.creada_en.isoformat(),
+        "presupuesto_id": a.presupuesto_id
+    } for a in alertas])
+
+
+# PATCH /api/alertas/<id>/marcar-leida
+@alerts_bp.route('/<int:id>/marcar-leida', methods=['PATCH'])
+@jwt_required()
+def marcar_alerta_leida(id):
+    alerta = Alerta.query.get_or_404(id)
+
+    # sólo el dueño del presupuesto puede marcarla
+    if alerta.presupuesto.usuario_id != get_jwt_identity():
+        return jsonify({"error": "No autorizado"}), 403
+
+    alerta.leida = True
+    db.session.commit()
+    return jsonify({"message": "Alerta marcada como leída"}), 200

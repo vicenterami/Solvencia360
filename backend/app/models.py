@@ -30,7 +30,10 @@ class Transaccion(db.Model):
 
 class Alerta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(100), nullable=False)  # Nuevo campo
     mensaje = db.Column(db.String(255), nullable=False)
     nivel = db.Column(db.String(50), nullable=False)
+    leida = db.Column(db.Boolean, default=False)  # Nuevo campo
     presupuesto_id = db.Column(db.Integer, db.ForeignKey("presupuesto.id"))
     creada_en = db.Column(db.DateTime, default=datetime.utcnow)
+    actualizada_en = db.Column(db.DateTime, onupdate=datetime.utcnow)  # Nuevo campo
